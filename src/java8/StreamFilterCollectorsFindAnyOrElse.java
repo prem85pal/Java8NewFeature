@@ -21,7 +21,7 @@ public class StreamFilterCollectorsFindAnyOrElse {
         List<Integer> listOf200s = numbers.stream().filter(num -> num > 200).collect(Collectors.toCollection(ArrayList::new));
         System.out.println("list of numbers greater than 200: " + listOf200s);
 
-        // Converting Stream to ArrayList in Java
+        // Converting Stream to LinkedList in Java
         List<Integer> listOf200sLL = numbers.stream().filter(num -> num > 200).collect(Collectors.toCollection(LinkedList::new));
         System.out.println("list of numbers greater than 200: " + listOf200sLL);
 

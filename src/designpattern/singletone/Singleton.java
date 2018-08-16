@@ -11,11 +11,37 @@ public class Singleton implements Cloneable, Serializable {
     private Singleton() {
     }
 
-    static synchronized Singleton getInstance() {
+    //creates multiple instance if two thread access this method simultaneously
 
+    public static Singleton getInstance() {
         if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+    /* * 2nd version : this definitely thread-safe and only
+     * creates one instance of Singleton on concurrent environment
+     * but unnecessarily expensive due to cost of synchronization  at every call.
+     * */
+
+    public static synchronized Singleton getInstanceTS() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+
+    /* An implementation of double checked locking of Singleton.
+     * Intention is to minimize cost of synchronization and improve performance,
+     * by only locking critical section of code, the code which creates instance of Singleton class.
+     * By the way this is still broken, if we don't make _instance volatile, as another thread can
+     * see a half initialized instance of Singleton.
+     * */
+
+    public static Singleton getInstanceDC() {
+        if (instance == null) {   //first checking
             synchronized (Singleton.class) {
-                if (instance == null) {
+                if (instance == null) { //second checking
                     instance = new Singleton();
                 }
             }
