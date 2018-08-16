@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class StreamCollectors {
+public class StreamFilterCollectorsFindAnyOrElse {
 
     public static void main(String[] args) {
 
@@ -34,6 +34,8 @@ public class StreamCollectors {
 
         Long count = numbers.stream().filter(num -> num > 100).collect(Collectors.counting());
         System.out.println(count);
+
+        Integer findNumber = numbers.stream().filter(x -> x == 100).findAny().orElse(0);
 
     }
 }

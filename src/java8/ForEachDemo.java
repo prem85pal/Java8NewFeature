@@ -1,20 +1,18 @@
 package java8;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java8.lambda_comparator.Developer;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ForEachDemo {
 
     public static void main(String[] args) {
+
         Map<String, Integer> map = new HashMap<>();
         map.put("A", 10);
         map.put("B", 20);
         map.put("C", 30);
-        map.put("D", 40);
-        map.put("E", 50);
-        map.put("F", 60);
 
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
             System.out.println("Item : " + entry.getKey() + " Count : " + entry.getValue());
@@ -45,6 +43,18 @@ public class ForEachDemo {
 
         //Output : B
         items.stream().filter(s -> s.contains("B")).forEach(System.out::println);
+
+        Collection<Integer> values = map.values();
+
+        List<Integer> integers = values.stream().map(val -> val * 2).collect(Collectors.toList());
+
+        System.out.println(integers);
+
+        List<Developer> list= new ArrayList<>();
+        list.add(new Developer(1,"name",33));
+        list.forEach(x->x.setSalary(40));
+        System.out.println(list);
+
     }
 
 }
