@@ -6,7 +6,7 @@ package oops;
 
 
 class Car {
-    //final will make sure engine is initialized
+    //To initialized car object Engine has to initialized
     //final variable must be initialized before constructor complete
     private final Engine engine;
 
