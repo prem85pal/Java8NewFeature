@@ -1,11 +1,14 @@
 package CollectionMyHashMap;
 
-//@author ntallapa
+/*
+ * Constructs an empty HashMap with the default initial capacity (16) and the default load factor (0.75).
+ * Constructs an empty HashMap with the specified initial capacity and the default load factor (0.75).
+ * */
 
 public class TMHashMap {
 
-    // for simplicity size is taken as 2^4
-    private Entry table[] = new Entry[4];
+
+    private Entry table[] = new Entry[2];
 
     class Entry {
         Employee key;
@@ -31,48 +34,37 @@ public class TMHashMap {
     }
 
 
-    private int getSupplementalHash(int h) {
-
-        h ^= (h >>> 20) ^ (h >>> 12);
-        return h ^ (h >>> 7) ^ (h >>> 4);
-    }
-
-
-    private int getBucketNumber(int hash) {
-        return hash & (4 - 1);
-    }
-
-
     public void put(Employee key, String value) {
-        int userHash = key.hashCode();
-        int hash = getSupplementalHash(userHash);
 
-        int bucket = getBucketNumber(hash);
-        Entry existingElement = table[bucket];
+        int bucketIndex = key.hashCode() % table.length;
 
-        for (; existingElement != null; existingElement = existingElement.next) {
+        Entry existingElement = table[bucketIndex];
 
+        while (existingElement != null) {
             if (existingElement.key.equals(key)) {
                 existingElement.value = value;
+                System.out.println("Duplicate key found and value overridden");
                 return;
             } else {
-                System.out.println("Collision detected for key " + key + ", adding element to the existing bucket");
-
+                System.out.println("Collision at " + bucketIndex + " for " + key + ", adding element to the existing bucket");
             }
+            existingElement = existingElement.next;
         }
+
+
         Entry entryInOldBucket = new Entry(key, value);
-        entryInOldBucket.next = table[bucket];
-        table[bucket] = entryInOldBucket;
+        entryInOldBucket.next = table[bucketIndex];
+        table[bucketIndex] = entryInOldBucket;
     }
 
 
     public Entry get(Employee key) {
 
-        int hash = getSupplementalHash(key.hashCode());
-        int bucket = getBucketNumber(hash);
-        Entry existingElement = table[bucket];
+        int bucketIndex = key.hashCode() % table.length;
+
+        Entry existingElement = table[bucketIndex];
+
         while (existingElement != null) {
-            System.out.println("Traversing the list inside the bucket for the key " + existingElement.getKey());
             if (existingElement.key.equals(key)) {
                 return existingElement;
             }
@@ -83,52 +75,40 @@ public class TMHashMap {
 
 
     public static void main(String[] args) {
-        TMHashMap tmhm = new TMHashMap();
 
-        System.out.println("============== Adding Element ===================");
-        Employee e1 = new Employee(100, "Niranjan");
-        tmhm.put(e1, "dept1");
+        TMHashMap map = new TMHashMap();
 
-        // duplicate
-        System.out.println("============== Adding Duplicate ===================");
-        Employee e1_dup = new Employee(100, "Niranjan");
-        tmhm.put(e1_dup, "dept12");
+        Employee e1 = new Employee(100, "A");
+        map.put(e1, "D1");
 
-        Entry e = tmhm.get(e1_dup);
-        System.out.println("GET element - " + e.getKey() + "::" + e.getValue());
+        Employee e2 = new Employee(100, "A");
+        map.put(e2, "D2");
 
-        System.out.println("============== Adding Elements ===================");
-        Employee e2 = new Employee(102, "Sravan");
-        tmhm.put(e2, "dept3");
+        Entry e = map.get(e2);
+        System.out.println(e.getKey() + "::" + e.getValue());
 
-        Employee e3 = new Employee(104, "Ananth");
-        tmhm.put(e3, "dept2");
+        Employee e3 = new Employee(102, "C");
+        map.put(e3, "D3");
+        e = map.get(e3);
+        System.out.println(e.getKey() + "::" + e.getValue());
 
-        Employee e4 = new Employee(106, "Rakesh");
-        tmhm.put(e4, "dept5");
+        Employee e4 = new Employee(104, "D");
+        map.put(e4, "D4");
+        e = map.get(e4);
+        System.out.println(e.getKey() + "::" + e.getValue());
 
-        Employee e5 = new Employee(108, "Shashi");
-        tmhm.put(e5, "dept2");
+        Employee e5 = new Employee(106, "E");
+        map.put(e5, "D5");
+        e = map.get(e5);
+        System.out.println(e.getKey() + "::" + e.getValue());
+
+        Employee e6 = new Employee(108, "F");
+        map.put(e6, "D6");
+        e = map.get(e6);
+        System.out.println(e.getKey() + "::" + e.getValue());
 
 
-        System.out.println("============== Adding Collisions ===================");
-        Employee e2_collision = new Employee(112, "Chandu");
-        tmhm.put(e2_collision, "dept16");
-        e = tmhm.get(e2_collision);
-        System.out.println("GET element - " + e.getKey() + "::" + e.getValue());
-
-        // collision with e3
-        Employee e3_collision = new Employee(114, "Santhosh");
-        tmhm.put(e3_collision, "dept9");
-        e = tmhm.get(e3_collision);
-        System.out.println("GET element - " + e.getKey() + "::" + e.getValue());
-
-        System.out.println("============== Adding Duplicate in Collision ===================");
-        Employee e3_collision_dupe = new Employee(124, "Santhosh");
-        tmhm.put(e3_collision_dupe, "dept91");
-        e = tmhm.get(e3_collision_dupe);
-        System.out.println("GET element - " + e.getKey() + "::" + e.getValue());
-
+        System.out.println(map);
     }
 
     static class Employee {
@@ -141,19 +121,25 @@ public class TMHashMap {
         }
 
         @Override
-        public int hashCode() {
-            return id % 10;
+        public boolean equals(Object o) {
+            if (this == o) return true;
+
+            Employee employee = (Employee) o;
+
+            return this.id.equals(employee.id) && this.name.equals(employee.name);
         }
 
         @Override
-        public boolean equals(Object obj) {
-            Employee otherEmp = (Employee) obj;
-            return this.name.equals(otherEmp.name);
+        public int hashCode() {
+            return id.hashCode() + name.hashCode();
         }
 
         @Override
         public String toString() {
-            return this.id + "-" + name;
+            return "Employee{" +
+                    "id=" + id +
+                    ", name='" + name + '\'' +
+                    '}';
         }
     }
 
