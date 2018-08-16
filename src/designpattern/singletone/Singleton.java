@@ -11,7 +11,7 @@ public class Singleton implements Cloneable, Serializable {
     private Singleton() {
     }
 
-    public static synchronized Singleton getInstance() {
+    static synchronized Singleton getInstance() {
 
         if (instance == null) {
             synchronized (Singleton.class) {
