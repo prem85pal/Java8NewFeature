@@ -1,6 +1,8 @@
 package collections;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 
 public class CollectionsClassMethods {
 
@@ -28,7 +30,7 @@ public class CollectionsClassMethods {
             }
         });
 
-        //java8
+
         list.sort(new Comparator<StudentB>() {
             @Override
             public int compare(StudentB o1, StudentB o2) {
@@ -36,10 +38,10 @@ public class CollectionsClassMethods {
             }
         });
 
-        //java 8 lambda
+
         list.sort((StudentB o1, StudentB o2) -> o1.getName().compareTo(o2.getName()));
 
-        //java 8 lambda
+
         list.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
 
         System.out.println("List sorted in ReverseOrder: ");
@@ -74,7 +76,6 @@ class StudentB {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
         StudentB student = (StudentB) o;
         return age == student.age && name.equals(student.name);
@@ -83,7 +84,7 @@ class StudentB {
     @Override
     public int hashCode() {
 
-        return 31 * (name != null ? name.hashCode() : 0) + age;
+        return age + name.hashCode();
     }
 
     @Override

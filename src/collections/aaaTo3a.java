@@ -17,12 +17,13 @@ public class aaaTo3a {
         for (String element : uniqueSet) {
             System.out.print(Collections.frequency(stringList, element) + element);
         }
-        System.out.println();
+
+        System.out.println("Second way");
         Map<String, Integer> map = new HashMap<>();
         for (String element : stringList) {
 
             Integer count = map.get(element);
-            map.put(element, count == null ? 1 : count + 1);
+            map.put(element, Objects.isNull(count) ? 1 : count + 1);
 
         }
         printMapInFormat(map);
@@ -34,7 +35,7 @@ public class aaaTo3a {
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
             System.out.print(entry.getValue() + entry.getKey());
         }
-        //Java8
+
         map.forEach((k, v) -> System.out.println("Key : " + k + " Value : " + v));
 
         Set<String> strings = map.keySet();
